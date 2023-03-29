@@ -7,17 +7,25 @@ namespace ClockAngleCalculator
         static void Main(string[] args)
         {
             Console.WriteLine("Enter time in this format '08:23'");
-            string givenTime = Console.ReadLine();
-            string hrstring = givenTime.Substring(0, 2);
-            string minstring = givenTime.Substring(3, 2);
+            string giventime = Console.ReadLine();
+
+            // Validate the input format
+            while (!IsValidTimeFormat(giventime) || !IsValidHourRange(giventime))
+            {
+                Console.WriteLine("Invalid time format. Please enter time in this format '08:23'");
+                giventime = Console.ReadLine();
+            }
+
+            string hrstring = giventime.Substring(0, 2);
+            string minstring = giventime.Substring(3, 2);
             int hhd = int.Parse(hrstring);
             int mhd = int.Parse(minstring);
-            int returnValue = FindAngle(hhd, mhd);
+            int returnValue = FindAng(hhd, mhd);
             Console.WriteLine(returnValue);
             Console.ReadLine();
         }
 
-        public static int FindAngle(int hhd, int mhd)
+        public static int FindAng(int hhd, int mhd)
         {
             int ang1;
             int ang2;
@@ -42,6 +50,24 @@ namespace ClockAngleCalculator
             }
 
             return answer;
+        }
+
+        public static bool IsValidTimeFormat(string input)
+        {
+            return DateTime.TryParseExact(input, "HH:mm", null, System.Globalization.DateTimeStyles.None, out _);
+        }
+
+        public static bool IsValidHourRange(string input)
+        {
+            string hrstring = input.Substring(0, 2);
+            int hhd = int.Parse(hrstring);
+
+            if (hhd >= 1 && hhd <= 12)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
